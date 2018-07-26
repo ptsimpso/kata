@@ -8,8 +8,54 @@
 
 var assert = require('assert');
 
-describe("100 Doors", () => {
-    it("should do something", () => {
-        assert.fail();
+function Door() {
+    this.open = false;
+    this.toggle = () => {
+        this.open = !this.open;
+    }
+}
+function Doorman() {
+    this.doors = []
+    this.init = () => {
+        for (var i = 0; i < 100; i++) {
+            this.doors.push(new Door());
+        }
+    }
+    this.init();
+}
+
+describe("Door", () => {
+    it("should be closed", () => {
+        const door = new Door();
+        assert.equal(door.open, false);
+    })
+    it("should be able to toggle it's state from closed to open", () => {
+        const door = new Door();
+        door.toggle();
+        assert.equal(door.open, true);
+    })
+    it("should be able to toggle it's state from open to closed", () => { 
+        const door = new Door();
+        door.toggle();
+        door.toggle();
+        assert.equal(door.open, false);
+    })
+})
+
+describe("Doorman", () => { 
+    it("should have 100 elements", () => { 
+        const doorman = new Doorman();
+        assert.equal(doorman.doors.length, 100);
+    })
+    it("should have 1st door be openable", () => {
+        const doorman = new Doorman();
+        assert.equal(doorman.doors[0].open, false);
+    })
+    it("should open all doors afer 1st pass", () => {
+        const doorman = new Doorman();
+        doorman.walk();
+        for (const door of doorman.doors) {
+            assert.equal(door.open, true);
+        }
     })
 })
