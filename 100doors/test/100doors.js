@@ -22,6 +22,17 @@ function Doorman() {
         }
     }
     this.init();
+    this.walk = (passes) => {
+
+        for (let i = 1; i <= passes; i++) {
+            for (const [index, door] of this.doors.entries()) {
+                if ((index + 1) % i == 0) {
+                    door.toggle();
+                }
+            }
+        }
+        
+    }
 }
 
 describe("Door", () => {
@@ -51,11 +62,30 @@ describe("Doorman", () => {
         const doorman = new Doorman();
         assert.equal(doorman.doors[0].open, false);
     })
-    it("should open all doors afer 1st pass", () => {
+    it("should open all doors on 1st pass", () => {
         const doorman = new Doorman();
-        doorman.walk();
+        let passes = 1;
+        doorman.walk(passes);
         for (const door of doorman.doors) {
             assert.equal(door.open, true);
         }
+    })
+    it("should close every second door on 2nd pass", () => {
+        const doorman = new Doorman();
+        let passes = 2;
+        doorman.walk(passes);
+        assert.equal(doorman.doors[0].open, true);
+        assert.equal(doorman.doors[1].open, false);
+        assert.equal(doorman.doors[3].open, false);
+    })
+    it("should toggle every 3rd door on 3rd pass", () => {
+        const doorman = new Doorman();
+        let passes = 3;
+        doorman.walk(passes);
+        assert.equal(doorman.doors[0].open, true);
+        assert.equal(doorman.doors[1].open, false);
+        assert.equal(doorman.doors[2].open, false);
+        assert.equal(doorman.doors[3].open, false);
+        assert.equal(doorman.doors[5].open, true);
     })
 })
